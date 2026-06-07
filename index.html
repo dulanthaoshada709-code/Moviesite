@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 MovieLK | සිංහල Movies</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/glassmorphism.css">
+</head>
+ 
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Animated Background Gradient -->
+    <div class="animated-bg"></div>
+    
+    <!-- Floating Neon Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    
+    <!-- Main Container -->
+    <div class="main-container">
+        
+        <!-- Header with Glass Effect -->
+        <header class="glass-header">
+            <div class="header-content">
+                <div class="logo-container" data-aos="fade-right">
+                    <div class="logo-icon">
+                        <i class="fas fa-film fa-spin"></i>
+                    </div>
+                    <h1 class="logo-text">
+                        <span class="gradient-text">Movie</span><span class="neon-text">LK</span>
+                    </h1>
+                    <div class="logo-subtitle">සිංහල Movies</div>
+                </div>
+                
+                <div class="search-wrapper" data-aos="fade-down">
+                    <div class="search-box glass-effect">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" 
+                               id="searchBar" 
+                               placeholder="🔍 Movie එකක් search කරන්න..." 
+                               autocomplete="off">
+                        <button class="search-btn" onclick="searchMovies()">
+                            <span class="btn-text">Search</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <!-- Live Search Results -->
+                    <div class="live-search-results" id="liveResults"></div>
+                </div>
+                
+                <div class="header-actions" data-aos="fade-left">
+                    <button class="theme-toggle glass-effect" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <a href="admin.html" class="admin-link glass-effect">
+                        <i class="fas fa-user-shield"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Hero Section with Carousel -->
+        <section class="hero-section" data-aos="fade-up">
+            <div class="hero-carousel" id="heroCarousel">
+                <!-- Dynamic hero items -->
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn prev" onclick="changeSlide(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-dots" id="carouselDots"></div>
+                <button class="carousel-btn next" onclick="changeSlide(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Quick Stats Bar -->
+        <div class="stats-bar glass-effect" data-aos="fade-up">
+            <div class="stat-item">
+                <i class="fas fa-film"></i>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalMovieCount">0</span>
+                    <span class="stat-label">Movies</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-download"></i>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalDownloadCount">0</span>
+                    <span class="stat-label">Downloads</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-users"></i>
+                <div class="stat-info">
+                    <span class="stat-number" id="visitorCount">0</span>
+                    <span class="stat-label">Visitors</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-star"></i>
+                <div class="stat-info">
+                    <span class="stat-number">4.9</span>
+                    <span class="stat-label">Rating</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Top Downloads - Marquee Style -->
+        <section class="trending-section" data-aos="fade-up">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-fire fire-icon"></i>
+                    <span class="gradient-text">Top Downloads</span>
+                </h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="marquee-container">
+                <div class="marquee-track" id="topDownloads">
+                    <!-- Dynamic content duplicated for seamless scroll -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Category Pills -->
+        <div class="category-pills" data-aos="fade-up">
+            <button class="pill active" onclick="filterMovies('all')">All</button>
+            <button class="pill" onclick="filterMovies('2024')">2024</button>
+            <button class="pill" onclick="filterMovies('2023')">2023</button>
+            <button class="pill" onclick="filterMovies('action')">Action</button>
+            <button class="pill" onclick="filterMovies('drama')">Drama</button>
+            <button class="pill" onclick="filterMovies('comedy')">Comedy</button>
+        </div>
+        
+        <!-- Movies Grid -->
+        <section class="movies-section" data-aos="fade-up">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-play-circle"></i>
+                    <span class="gradient-text">All Movies</span>
+                </h2>
+                <div class="view-options">
+                    <button class="view-btn active" onclick="changeView('grid')">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button class="view-btn" onclick="changeView('list')">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Skeleton Loading -->
+            <div class="skeleton-grid" id="skeletonLoader">
+                <!-- 8 skeleton cards -->
+            </div>
+            
+            <!-- Actual Movies Grid -->
+            <div class="movies-grid" id="allMovies" style="display:none;">
+                <!-- Dynamic content -->
+            </div>
+            
+            <!-- Load More Button -->
+            <div class="load-more-container" id="loadMoreContainer" style="display:none;">
+                <button class="load-more-btn glass-effect" onclick="loadMoreMovies()">
+                    <i class="fas fa-plus"></i>
+                    <span>Load More Movies</span>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="glass-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>🎬 MovieLK</h3>
+                    <p>Best Sinhala Movie Download Site</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="footer-copyright">
+                    <p>© 2024 MovieLK. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+        
+    </div>
+    
+    <!-- Back to Top Button -->
+    <button class="back-to-top glass-effect" onclick="scrollToTop()">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/main.js"></script>
+ <!-- </body> tag එකට උඩින් add කරන්න -->
+<script src="js/database.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

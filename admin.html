@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - MovieLK</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           ADMIN PANEL - ROYAL DARK THEME
+           ============================================ */
+        
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #00b894;
+            --accent: #fd79a8;
+            --warning: #fdcb6e;
+            --danger: #e17055;
+            --success: #00b894;
+            --info: #74b9ff;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #b2bec3;
+            --text-muted: #636e72;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-neon: linear-gradient(45deg, #ff6b6b, #ffd93d, #6c5ce7, #00b894);
+            --shadow-neon: 0 0 30px rgba(108, 92, 231, 0.5);
+            --radius-sm: 8px;
+            --radius-md: 15px;
+            --radius-lg: 25px;
+            --radius-xl: 50px;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--gradient-1); border-radius: 10px; }
+        
+        /* Background Orbs */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatOrb 20s ease-in-out infinite;
+        }
+        
+        .bg-orb-1 {
+            width: 600px; height: 600px;
+            background: var(--primary);
+            top: -300px; right: -200px;
+        }
+        
+        .bg-orb-2 {
+            width: 500px; height: 500px;
+            background: var(--accent);
+            bottom: -200px; left: -200px;
+            animation-delay: -10s;
+        }
+        
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, -50px) scale(1.1); }
+        }
+        
+        /* Particles */
+        #particles-js {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        /* ================ LOGIN PAGE ================ */
+        
+        .login-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(108, 92, 231, 0.5);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.7); }
+            50% { box-shadow: 0 0 0 30px rgba(108, 92, 231, 0); }
+        }
+        
+        .login-header h2 {
+            font-size: 2em;
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            color: var(--text-secondary);
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2em;
+            transition: all var(--transition-smooth);
+            z-index: 1;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 18px 20px 18px 55px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 1em;
+            outline: none;
+            transition: all var(--transition-smooth);
+        }
+        
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
+        }
+        
+        .input-group input:focus ~ i {
+            color: var(--primary);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.5);
+        }
+        
+        .login-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .error-msg {
+            color: var(--danger);
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .admin-list {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+        
+        /* ================ DASHBOARD ================ */
+        
+        .dashboard {
+            display: none;
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .admin-header {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            animation: slideDown 0.6s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .admin-header h1 {
+            font-size: 1.8em;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logout-btn {
+            padding: 12px 25px;
+            background: rgba(225, 112, 85, 0.2);
+            border: 1px solid rgba(225, 112, 85, 0.3);
+            border-radius: var(--radius-xl);
+            color: var(--danger);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(225, 112, 85, 0.4);
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            transition: all var(--transition-bounce);
+            cursor: pointer;
+            animation: fadeInUp 0.6s ease both;
+        }
+        
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-neon);
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .stat-icon.movies { background: rgba(108, 92, 231, 0.2); color: var(--primary); }
+        .stat-icon.downloads { background: rgba(0, 184, 148, 0.2); color: var(--secondary); }
+        .stat-icon.visitors { background: rgba(253, 121, 168, 0.2); color: var(--accent); }
+        .stat-icon.admins { background: rgba(253, 203, 110, 0.2); color: var(--warning); }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+        
+        /* Movies Table */
+        .movies-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .movies-table-wrapper {
+            overflow-x: auto;
+        }
+        
+        .movies-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+        
+        .movies-table th {
+            text-align: left;
+            padding: 15px;
+            color: var(--primary-light);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+        
+        .movies-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .movies-table tbody tr {
+            transition: all var(--transition-smooth);
+        }
+        
+        .movies-table tbody tr:hover {
+            background: rgba(108, 92, 231, 0.1);
+        }
+        
+        .movie-thumb {
+            width: 50px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+        }
+        
+        .delete-btn {
+            padding: 8px 15px;
+            background: rgba(225, 112, 85, 0.2);
+            border: 1px solid rgba(225, 112, 85, 0.3);
+            border-radius: var(--radius-sm);
+            color: var(--danger);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            font-size: 0.9em;
+        }
+        
+        .delete-btn:hover {
+            background: var(--danger);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .quality-badges {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .quality-badge {
+            padding: 3px 10px;
+            background: rgba(108, 92, 231, 0.2);
+            border-radius: var(--radius-xl);
+            font-size: 0.8em;
+        }
+        
+        /* FAB Button */
+        .fab {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(108, 92, 231, 0.5);
+            transition: all var(--transition-bounce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .fab:hover {
+            transform: scale(1.15) rotate(180deg);
+            box-shadow: 0 15px 50px rgba(108, 92, 231, 0.7);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+        
+        .modal {
+            background: var(--bg-card);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            width: 100%;
+            max-width: 700px;
+            animation: modalIn 0.5s ease;
+            margin: auto;
+        }
+        
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.8) translateY(50px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .modal h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal input,
+        .modal textarea,
+        .modal select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 1em;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: all var(--transition-smooth);
+        }
+        
+        .modal input:focus,
+        .modal textarea:focus,
+        .modal select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.3);
+        }
+        
+        .modal textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .modal select option {
+            background: var(--bg-card);
+            color: white;
+        }
+        
+        .quality-section,
+        .subtitle-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .quality-section h4,
+        .subtitle-section h4 {
+            margin-bottom: 15px;
+            color: var(--primary-light);
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quality-row,
+        .subtitle-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .quality-row input,
+        .subtitle-row input {
+            margin-bottom: 0;
+        }
+        
+        .add-row-btn {
+            padding: 10px 20px;
+            background: rgba(0, 184, 148, 0.2);
+            border: 1px solid rgba(0, 184, 148, 0.3);
+            border-radius: var(--radius-xl);
+            color: var(--secondary);
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .add-row-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .remove-row-btn {
+            padding: 10px 12px;
+            background: rgba(225, 112, 85, 0.2);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: var(--danger);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            flex-shrink: 0;
+        }
+        
+        .remove-row-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .save-btn {
+            flex: 1;
+            padding: 15px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.5);
+        }
+        
+        .cancel-btn {
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        
+        .cancel-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: white;
+            z-index: 3000;
+            animation: slideInRight 0.5s ease;
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .notification.success { border-left: 4px solid var(--success); }
+        .notification.error { border-left: 4px solid var(--danger); }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modal {
+                padding: 25px;
+                margin: 20px;
+            }
+            
+            .quality-row,
+            .subtitle-row {
+                flex-direction: column;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .fab {
+                width: 60px;
+                height: 60px;
+                bottom: 30px;
+                right: 30px;
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div id="particles-js"></div>
+    
+    <!-- ================ LOGIN PAGE ================ -->
+    <div class="login-container" id="loginPage">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">👑</div>
+                <h2>Admin Panel</h2>
+                <p>MovieLK Management System</p>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Username" autocomplete="off">
+                <i class="fas fa-user"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password">
+                <i class="fas fa-lock"></i>
+            </div>
+            
+            <button class="login-btn" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+            
+            <p class="error-msg" id="loginError">❌ Username හෝ Password වැරදියි!</p>
+            
+            <div class="admin-list">
+                <strong>🔑 Admin Access (3 Accounts):</strong><br>
+                admin1 / pass123 | admin2 / pass456 | admin3 / pass789
+            </div>
+        </div>
+    </div>
+    
+    <!-- ================ DASHBOARD ================ -->
+    <div class="dashboard" id="dashboard">
+        <header class="admin-header">
+            <h1>👑 Admin Dashboard - MovieLK</h1>
+            <div style="display:flex;gap:15px;align-items:center;">
+                <span style="color:var(--text-secondary);font-size:0.9em;">
+                    <i class="fas fa-database"></i> Cloud DB Connected
+                </span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon movies"><i class="fas fa-film"></i></div>
+                <div class="stat-value" id="totalMovies">0</div>
+                <div class="stat-label">Total Movies</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon downloads"><i class="fas fa-download"></i></div>
+                <div class="stat-value" id="totalDownloads">0</div>
+                <div class="stat-label">Total Downloads</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon visitors"><i class="fas fa-users"></i></div>
+                <div class="stat-value" id="visitorCount">0</div>
+                <div class="stat-label">Site Visitors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon admins"><i class="fas fa-user-shield"></i></div>
+                <div class="stat-value">3</div>
+                <div class="stat-label">Active Admins</div>
+            </div>
+        </div>
+        
+        <!-- Movies Table -->
+        <div class="movies-section">
+            <div class="section-header">
+                <h2><i class="fas fa-list"></i> All Movies</h2>
+                <span style="color:var(--text-secondary);font-size:0.9em;">
+                    <i class="fas fa-sync-alt"></i> Auto-sync with cloud
+                </span>
+            </div>
+            <div class="movies-table-wrapper">
+                <table class="movies-table">
+                    <thead>
+                        <tr>
+                            <th>Poster</th>
+                            <th>Title</th>
+                            <th>Year</th>
+                            <th>Qualities</th>
+                            <th>Downloads</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="moviesTableBody">
+                        <!-- Dynamic Content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- FAB Button -->
+        <button class="fab" onclick="openAddModal()" title="Add New Movie">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+    
+    <!-- ================ ADD MOVIE MODAL ================ -->
+    <div class="modal-overlay" id="addModal">
+        <div class="modal">
+            <h2>🎬 Add New Movie</h2>
+            
+            <input type="text" id="movieTitle" placeholder="Movie Title *" required>
+            <input type="text" id="movieYear" placeholder="Year (2024) *" required>
+            <input type="text" id="moviePoster" placeholder="Poster Image URL *" required>
+            <select id="movieCategory">
+                <option value="">Select Category</option>
+                <option value="action">🎯 Action</option>
+                <option value="drama">🎭 Drama</option>
+                <option value="comedy">😂 Comedy</option>
+                <option value="horror">👻 Horror</option>
+                <option value="romance">💕 Romance</option>
+                <option value="scifi">🚀 Sci-Fi</option>
+            </select>
+            <textarea id="movieDescription" placeholder="Movie Description *" required></textarea>
+            
+            <!-- Qualities -->
+            <div class="quality-section">
+                <h4>📥 Download Qualities <span style="color:var(--danger);">*</span></h4>
+                <div id="qualitiesContainer">
+                    <div class="quality-row">
+                        <input type="text" placeholder="Quality Name (1080p)" class="quality-name">
+                        <input type="text" placeholder="Download Link" class="quality-link">
+                        <button class="remove-row-btn" onclick="this.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <button class="add-row-btn" onclick="addQualityRow()">
+                    <i class="fas fa-plus"></i> Add Quality
+                </button>
+            </div>
+            
+            <!-- Subtitles -->
+            <div class="subtitle-section">
+                <h4>📝 Subtitles <span style="color:var(--text-secondary);font-size:0.8em;">(Optional)</span></h4>
+                <div id="subtitlesContainer">
+                    <div class="subtitle-row">
+                        <input type="text" placeholder="Subtitle Name (Sinhala Sub)" class="subtitle-name">
+                        <input type="text" placeholder="Subtitle File Link (.srt)" class="subtitle-link">
+                        <button class="remove-row-btn" onclick="this.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <button class="add-row-btn" onclick="addSubtitleRow()">
+                    <i class="fas fa-plus"></i> Add Subtitle
+                </button>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeAddModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="save-btn" onclick="saveMovie()">
+                    <i class="fas fa-save"></i> Save Movie
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- ⭐ DATABASE SCRIPT -->
+    <script src="js/database.js"></script>
+    
+    <script>
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+        
+        // Particles Background
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 40, density: { enable: true, value_area: 800 } },
+                color: { value: ['#6c5ce7', '#fd79a8', '#00b894'] },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1 } },
+                size: { value: 2, random: true },
+                line_linked: { enable: true, distance: 150, color: '#6c5ce7', opacity: 0.1, width: 1 },
+                move: { enable: true, speed: 1.5, direction: 'none', random: true, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'grab' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                },
+                modes: {
+                    grab: { distance: 200, line_linked: { opacity: 0.3 } },
+                    push: { particles_nb: 4 }
+                }
+            },
+            retina_detect: true
+        });
+        
+        // ============================================
+        // NOTIFICATION SYSTEM
+        // ============================================
+        
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️'
+            };
+            
+            notification.innerHTML = `
+                <span>${icons[type] || '📢'}</span>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Auto remove
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.5s ease reverse';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+        
+        // ============================================
+        // LOGIN SYSTEM
+        // ============================================
+        
+        const admins = [
+            { username: 'admin1', password: 'pass123' },
+            { username: 'admin2', password: 'pass456' },
+            { username: 'admin3', password: 'pass789' }
+        ];
+        
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMsg = document.getElementById('loginError');
+            
+            if (!username || !password) {
+                errorMsg.textContent = '⚠️ Username සහ Password දෙකම දාන්න!';
+                errorMsg.style.display = 'block';
+                setTimeout(() => errorMsg.style.display = 'none', 3000);
+                return;
+            }
+            
+            const admin = admins.find(a => a.username === username && a.password === password);
+            
+            if (admin) {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                
+                // Save login state
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminUser', username);
+                
+                showNotification(`Welcome back, ${username}! 🎉`, 'success');
+                loadDashboard();
+            } else {
+                errorMsg.style.display = 'block';
+                errorMsg.style.animation = 'none';
+                errorMsg.offsetHeight; // Trigger reflow
+                errorMsg.style.animation = 'shake 0.5s ease';
+                
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        function logout() {
+            if (confirm('Logout වෙන්න විශ්වාසද?')) {
+                sessionStorage.removeItem('adminLoggedIn');
+                sessionStorage.removeItem('adminUser');
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                showNotification('Logged out successfully!', 'success');
+            }
+        }
+        
+        // Auto-login check
+        function checkAutoLogin() {
+            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadDashboard();
+            }
+        }
+        
+        // ============================================
+        // DASHBOARD FUNCTIONS
+        // ============================================
+        
+        async function loadDashboard() {
+            try {
+                // Show loading state
+                document.getElementById('moviesTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center;padding:50px;">
+                            <div class="loader" style="width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top:3px solid var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div>
+                            <p style="opacity:0.7;">Loading movies from cloud...</p>
+                        </td>
+                    </tr>
+                `;
+                
+                // Load from cloud
+                const movies = await db.getMovies();
+                const visitorData = await db.getVisitorCount();
+                
+                // Update stats with animation
+                animateValue('totalMovies', 0, movies.length, 1000);
+                animateValue('totalDownloads', 0, movies.reduce((sum, m) => sum + (m.downloads || 0), 0), 1000);
+                animateValue('visitorCount', 0, visitorData.totalCount || 0, 1000);
+                
+                // Display movies
+                displayMoviesTable(movies);
+                
+                showNotification(`Loaded ${movies.length} movies from cloud! ☁️`, 'success');
+                
+            } catch (error) {
+                console.error('❌ Dashboard load error:', error);
+                
+                // Fallback to localStorage
+                const localMovies = JSON.parse(localStorage.getItem('moviesData') || '[]');
+                document.getElementById('totalMovies').textContent = localMovies.length;
+                
+                let totalDownloads = localMovies.reduce((sum, m) => sum + (m.downloads || 0), 0);
+                document.getElementById('totalDownloads').textContent = formatNumber(totalDownloads);
+                
+                displayMoviesTable(localMovies);
+                
+                showNotification('⚠️ Cloud sync failed. Using local data.', 'warning');
+            }
+        }
+        
+        function displayMoviesTable(movies) {
+            const tbody = document.getElementById('moviesTableBody');
+            
+            if (!movies || movies.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center;padding:60px 20px;">
+                            <i class="fas fa-film" style="font-size:4em;opacity:0.2;display:block;margin-bottom:20px;"></i>
+                            <h3 style="opacity:0.7;margin-bottom:10px;">No Movies Yet</h3>
+                            <p style="opacity:0.5;margin-bottom:20px;">Click the + button to add your first movie!</p>
+                            <button class="add-row-btn" onclick="openAddModal()" style="font-size:1em;padding:12px 30px;">
+                                <i class="fas fa-plus"></i> Add First Movie
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = movies.map((movie, index) => `
+                <tr style="animation: fadeInUp 0.5s ease ${index * 0.05}s both;">
+                    <td>
+                        <img src="${movie.poster}" 
+                             class="movie-thumb" 
+                             alt="${movie.title}"
+                             onerror="this.src='https://via.placeholder.com/50x70/1a1a2e/fff?text=No'"
+                             loading="lazy">
+                    </td>
+                    <td>
+                        <strong>${movie.title}</strong>
+                        ${movie.category ? `<br><small style="color:var(--primary-light);">${movie.category}</small>` : ''}
+                    </td>
+                    <td>📅 ${movie.year}</td>
+                    <td>
+                        <div class="quality-badges">
+                            ${Object.keys(movie.qualities || {}).map(q => 
+                                `<span class="quality-badge">📥 ${q}</span>`
+                            ).join('')}
+                        </div>
+                        ${Object.keys(movie.subtitles || {}).length > 0 ? 
+                            `<small style="color:var(--accent);display:block;margin-top:5px;">
+                                📝 ${Object.keys(movie.subtitles).length} subtitle(s)
+                            </small>` : ''}
+                    </td>
+                    <td>⬇️ ${formatNumber(movie.downloads || 0)}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteMovie(${movie.id})" title="Delete Movie">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Animate counter
+        function animateValue(elementId, start, end, duration) {
+            const element = document.getElementById(elementId);
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    element.textContent = formatNumber(end);
+                    clearInterval(timer);
+                } else {
+                    element.textContent = formatNumber(Math.floor(current));
+                }
+            }, 16);
+        }
+        
+        // ============================================
+        // ADD MOVIE FUNCTIONS
+        // ============================================
+        
+        function openAddModal() {
+            document.getElementById('addModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            resetForm();
+        }
+        
+        function resetForm() {
+            document.getElementById('movieTitle').value = '';
+            document.getElementById('movieYear').value = '';
+            document.getElementById('moviePoster').value = '';
+            document.getElementById('movieCategory').value = '';
+            document.getElementById('movieDescription').value = '';
+            
+            document.getElementById('qualitiesContainer').innerHTML = `
+                <div class="quality-row">
+                    <input type="text" placeholder="Quality Name (1080p)" class="quality-name">
+                    <input type="text" placeholder="Download Link" class="quality-link">
+                    <button class="remove-row-btn" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('subtitlesContainer').innerHTML = `
+                <div class="subtitle-row">
+                    <input type="text" placeholder="Subtitle Name (Sinhala Sub)" class="subtitle-name">
+                    <input type="text" placeholder="Subtitle File Link (.srt)" class="subtitle-link">
+                    <button class="remove-row-btn" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        }
+        
+        function addQualityRow() {
+            const container = document.getElementById('qualitiesContainer');
+            const row = document.createElement('div');
+            row.className = 'quality-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Quality Name" class="quality-name">
+                <input type="text" placeholder="Download Link" class="quality-link">
+                <button class="remove-row-btn" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(row);
+            
+            // Focus on new input
+            row.querySelector('.quality-name').focus();
+        }
+        
+        function addSubtitleRow() {
+            const container = document.getElementById('subtitlesContainer');
+            const row = document.createElement('div');
+            row.className = 'subtitle-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Subtitle Name" class="subtitle-name">
+                <input type="text" placeholder="Subtitle File Link" class="subtitle-link">
+                <button class="remove-row-btn" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(row);
+            
+            // Focus on new input
+            row.querySelector('.subtitle-name').focus();
+        }
+        
+        async function saveMovie() {
+            const title = document.getElementById('movieTitle').value.trim();
+            const year = document.getElementById('movieYear').value.trim();
+            const poster = document.getElementById('moviePoster').value.trim();
+            const category = document.getElementById('movieCategory').value;
+            const description = document.getElementById('movieDescription').value.trim();
+            
+            // Validation
+            if (!title || !year || !poster || !description) {
+                showNotification('⚠️ කරුණාකර සියලුම * fields පුරවන්න!', 'error');
+                return;
+            }
+            
+            // Get qualities
+            const qualityNames = document.querySelectorAll('.quality-name');
+            const qualityLinks = document.querySelectorAll('.quality-link');
+            const qualities = {};
+            
+            qualityNames.forEach((nameInput, i) => {
+                const name = nameInput.value.trim();
+                const link = qualityLinks[i].value.trim();
+                if (name && link) {
+                    qualities[name] = link;
+                }
+            });
+            
+            if (Object.keys(qualities).length === 0) {
+                showNotification('⚠️ අඩුම එක quality එකක්වත් add කරන්න!', 'error');
+                return;
+            }
+            
+            // Get subtitles
+            const subtitleNames = document.querySelectorAll('.subtitle-name');
+            const subtitleLinks = document.querySelectorAll('.subtitle-link');
+            const subtitles = {};
+            
+            subtitleNames.forEach((nameInput, i) => {
+                const name = nameInput.value.trim();
+                const link = subtitleLinks[i].value.trim();
+                if (name && link) {
+                    subtitles[name] = link;
+                }
+            });
+            
+            // Create movie object
+            const newMovie = {
+                id: Date.now(),
+                title,
+                year,
+                poster,
+                category,
+                description,
+                downloads: 0,
+                rating: (Math.random() * 2 + 3).toFixed(1),
+                qualities,
+                subtitles,
+                addedDate: new Date().toISOString(),
+                addedBy: sessionStorage.getItem('adminUser') || 'unknown'
+            };
+            
+            // Save button loading state
+            const saveBtn = document.querySelector('.save-btn');
+            const originalHTML = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            saveBtn.disabled = true;
+            
+            try {
+                // Save to cloud
+                const result = await db.addMovie(newMovie);
+                
+                if (result.success) {
+                    showNotification('✅ Movie එක cloud එකට save වුනා!', 'success');
+                    closeAddModal();
+                    await loadDashboard();
+                } else {
+                    throw new Error('Cloud save failed');
+                }
+                
+            } catch (error) {
+                console.error('Save error:', error);
+                
+                // LocalStorage fallback
+                const movies = JSON.parse(localStorage.getItem('moviesData') || '[]');
+                movies.push(newMovie);
+                localStorage.setItem('moviesData', JSON.stringify(movies));
+                
+                showNotification('⚠️ Cloud save fail. Locally saved!', 'warning');
+                closeAddModal();
+                await loadDashboard();
+                
+            } finally {
+                saveBtn.innerHTML = originalHTML;
+                saveBtn.disabled = false;
+            }
+        }
+        
+        // ============================================
+        // DELETE MOVIE
+        // ============================================
+        
+        async function deleteMovie(id) {
+            if (!confirm('🗑️ ඔබට විශ්වාසද මෙම movie එක delete කරන්න?\n\nමෙය undo කරන්න බෑ!')) {
+                return;
+            }
+            
+            try {
+                const result = await db.deleteMovie(id);
+                
+                if (result.success) {
+                    showNotification('✅ Movie delete වුනා!', 'success');
+                    await loadDashboard();
+                } else {
+                    throw new Error(result.error || 'Delete failed');
+                }
+                
+            } catch (error) {
+                console.error('Delete error:', error);
+                
+                // LocalStorage fallback
+                let movies = JSON.parse(localStorage.getItem('moviesData') || '[]');
+                movies = movies.filter(m => m.id !== id);
+                localStorage.setItem('moviesData', JSON.stringify(movies));
+                
+                showNotification('⚠️ Locally deleted. Will sync later.', 'warning');
+                await loadDashboard();
+            }
+        }
+        
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num?.toString() || '0';
+        }
+        
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        
+        // Close modal on overlay click
+        document.getElementById('addModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAddModal();
+        });
+        
+        // Enter key to login
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') {
+                login();
+            }
+        });
+        
+        // Escape key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('addModal').style.display === 'flex') {
+                closeAddModal();
+            }
+        });
+        
+        // ============================================
+        // INITIAL CHECK
+        // ============================================
+        
+        window.addEventListener('DOMContentLoaded', function() {
+            checkAutoLogin();
+            console.log('👑 Admin Panel Ready');
+            console.log('🗄️ Database Status:', db ? 'Connected' : 'Not Connected');
+        });
+    </script>
+</body>
+</html>

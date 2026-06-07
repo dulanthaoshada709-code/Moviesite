@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details - MovieLK</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           MOVIE DETAIL PAGE - ULTRA DARK THEME
+           ============================================ */
+        
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #00b894;
+            --accent: #fd79a8;
+            --warning: #fdcb6e;
+            --danger: #e17055;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #b2bec3;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-neon: linear-gradient(45deg, #ff6b6b, #ffd93d, #6c5ce7, #00b894);
+            --shadow-neon: 0 0 30px rgba(108, 92, 231, 0.5);
+            --radius-sm: 8px;
+            --radius-md: 15px;
+            --radius-lg: 25px;
+            --radius-xl: 50px;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-1);
+            border-radius: 10px;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: floatOrb 15s ease-in-out infinite;
+        }
+        
+        .bg-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -200px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+        
+        .bg-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            bottom: -150px;
+            left: -100px;
+            animation-delay: -7s;
+        }
+        
+        .bg-orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+        
+        @keyframes floatOrb {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-30px, 30px) scale(0.9);
+            }
+        }
+        
+        /* Particles */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        /* Main Container */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Glass Header */
+        .glass-header {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 15px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition-smooth);
+        }
+        
+        .glass-header:hover {
+            border-color: rgba(108, 92, 231, 0.5);
+            box-shadow: var(--shadow-neon);
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 25px;
+            border-radius: var(--radius-xl);
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all var(--transition-smooth);
+            text-decoration: none;
+        }
+        
+        .back-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateX(-5px);
+            box-shadow: var(--shadow-neon);
+        }
+        
+        .logo-text {
+            font-size: 2em;
+            font-weight: 900;
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+        
+        /* Movie Hero Section */
+        .movie-hero {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Poster Container */
+        .poster-container {
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .poster-wrapper {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .poster-wrapper:hover {
+            transform: rotateY(10deg) rotateX(-5deg);
+        }
+        
+        .poster-wrapper img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            display: block;
+            border-radius: var(--radius-lg);
+            transition: transform 0.5s ease;
+        }
+        
+        .poster-wrapper:hover img {
+            transform: scale(1.05);
+        }
+        
+        .poster-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, 
+                rgba(108, 92, 231, 0.3),
+                rgba(253, 121, 168, 0.3));
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+        
+        .poster-wrapper:hover .poster-glow {
+            opacity: 1;
+        }
+        
+        .poster-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--gradient-1);
+            padding: 8px 20px;
+            border-radius: var(--radius-xl);
+            font-weight: 600;
+            font-size: 0.9em;
+            z-index: 2;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.7); }
+            50% { box-shadow: 0 0 0 20px rgba(108, 92, 231, 0); }
+        }
+        
+        .download-count-badge {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2;
+            animation: slideInLeft 0.5s ease 0.3s both;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .download-count-badge i {
+            color: var(--warning);
+            animation: bounce 1s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        /* Movie Info */
+        .movie-info {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .movie-title {
+            font-size: 3em;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+        
+        .movie-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            font-size: 0.95em;
+            transition: all var(--transition-smooth);
+        }
+        
+        .meta-item:hover {
+            background: rgba(108, 92, 231, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .meta-item i {
+            color: var(--warning);
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 3px;
+        }
+        
+        .rating-stars i {
+            color: var(--warning);
+            font-size: 1.2em;
+        }
+        
+        /* Description */
+        .description-box {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .description-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 5px 0 0 5px;
+        }
+        
+        .description-box h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .description-box p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* Download Section */
+        .download-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 30px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        
+        .download-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-light);
+        }
+        
+        .download-section h3 i {
+            color: var(--secondary);
+            animation: bounce 1s ease-in-out infinite;
+        }
+        
+        .quality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .quality-btn {
+            position: relative;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(108, 92, 231, 0.3);
+            border-radius: var(--radius-md);
+            color: white;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all var(--transition-bounce);
+            overflow: hidden;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quality-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            z-index: 0;
+        }
+        
+        .quality-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .quality-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+        }
+        
+        .quality-btn span, .quality-btn i {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .quality-btn i {
+            font-size: 1.5em;
+        }
+        
+        .quality-btn.recommended {
+            border-color: var(--secondary);
+            background: rgba(0, 184, 148, 0.1);
+        }
+        
+        .quality-btn.recommended::after {
+            content: 'BEST';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--secondary);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.7em;
+            z-index: 2;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* Subtitle Section */
+        .subtitle-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 30px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+        
+        .subtitle-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-light);
+        }
+        
+        .subtitle-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .subtitle-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: rgba(253, 121, 168, 0.1);
+            border: 2px solid rgba(253, 121, 168, 0.3);
+            border-radius: var(--radius-xl);
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .subtitle-btn:hover {
+            background: rgba(253, 121, 168, 0.2);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(253, 121, 168, 0.3);
+        }
+        
+        .subtitle-btn i {
+            color: var(--accent);
+            font-size: 1.2em;
+        }
+        
+        /* Share Section */
+        .share-section {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .share-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-5px) rotate(360deg);
+            transition: all var(--transition-bounce);
+        }
+        
+        .share-btn.facebook:hover {
+            background: #1877f2;
+            border-color: #1877f2;
+            box-shadow: 0 10px 30px rgba(24, 119, 242, 0.5);
+        }
+        
+        .share-btn.telegram:hover {
+            background: #0088cc;
+            border-color: #0088cc;
+            box-shadow: 0 10px 30px rgba(0, 136, 204, 0.5);
+        }
+        
+        .share-btn.whatsapp:hover {
+            background: #25D366;
+            border-color: #25D366;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+        }
+        
+        /* Loading Animation */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+        }
+        
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 968px) {
+            .movie-hero {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .poster-wrapper img {
+                height: 400px;
+            }
+            
+            .movie-title {
+                font-size: 2em;
+            }
+            
+            .quality-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .glass-header {
+                padding: 10px 15px;
+            }
+            
+            .movie-title {
+                font-size: 1.5em;
+            }
+            
+            .quality-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-animation">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
+    <div id="particles-js"></div>
+    
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Header -->
+        <header class="glass-header" data-aos="fade-down">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Home</span>
+            </a>
+            <div class="logo-text" onclick="window.location.href='index.html'">
+                🎬 MovieLK
+            </div>
+            <div style="width:120px;"></div>
+        </header>
+        
+        <!-- Loading -->
+        <div class="loading-container" id="loadingSpinner">
+            <div class="loader"></div>
+        </div>
+        
+        <!-- Movie Details -->
+        <div id="movieContent" style="display:none;">
+            <!-- Dynamic Content Here -->
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+        
+        // Initialize Particles
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 50, density: { enable: true, value_area: 800 } },
+                color: { value: ['#6c5ce7', '#fd79a8', '#00b894'] },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#6c5ce7', opacity: 0.2, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: true, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'grab' }, resize: true },
+                modes: { grab: { distance: 200, line_linked: { opacity: 0.5 } } }
+            },
+            retina_detect: true
+        });
+        
+        // Get Movie ID
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = parseInt(urlParams.get('id'));
+        
+        // Load Movie
+        async function loadMovie() {
+            const movies = JSON.parse(localStorage.getItem('moviesData') || '[]');
+            const movie = movies.find(m => m.id === movieId);
+            
+            setTimeout(() => {
+                document.getElementById('loadingSpinner').style.display = 'none';
+                const content = document.getElementById('movieContent');
+                content.style.display = 'block';
+                
+                if (!movie) {
+                    content.innerHTML = `
+                        <div style="text-align:center;padding:100px 20px;">
+                            <i class="fas fa-film" style="font-size:5em;color:var(--primary);margin-bottom:30px;"></i>
+                            <h2 style="font-size:2em;">Movie එක හම්බුනේ නෑ 😔</h2>
+                            <a href="index.html" class="back-btn" style="display:inline-flex;margin-top:20px;">
+                                <i class="fas fa-home"></i> Home යන්න
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                renderMovie(movie);
+            }, 1000);
+        }
+        
+        // Render Movie
+        function renderMovie(movie) {
+            const content = document.getElementById('movieContent');
+            
+            // Generate quality buttons
+            const qualityKeys = Object.keys(movie.qualities || {});
+            let qualityButtons = '';
+            
+            qualityKeys.forEach((quality, index) => {
+                const isRecommended = quality === '1080p' || quality === '4K';
+                qualityButtons += `
+                    <a href="${movie.qualities[quality]}" 
+                       class="quality-btn ${isRecommended ? 'recommended' : ''}"
+                       download
+                       onclick="incrementDownload(${movie.id})">
+                        <i class="fas fa-download"></i>
+                        <span>${quality}</span>
+                    </a>
+                `;
+            });
+            
+            // Generate subtitle buttons
+            const subtitleKeys = Object.keys(movie.subtitles || {});
+            let subtitleButtons = '';
+            
+            subtitleKeys.forEach(name => {
+                subtitleButtons += `
+                    <a href="${movie.subtitles[name]}" class="subtitle-btn" download>
+                        <i class="fas fa-closed-captioning"></i>
+                        <span>📝 ${name}</span>
+                        <i class="fas fa-download"></i>
+                    </a>
+                `;
+            });
+            
+            // Star rating
+            const rating = movie.rating || 4.5;
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            let starsHTML = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '<i class="fas fa-star"></i>';
+            }
+            if (halfStar) {
+                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            content.innerHTML = `
+                <div class="movie-hero">
+                    <!-- Poster -->
+                    <div class="poster-container" data-aos="fade-right">
+                        <div class="poster-wrapper">
+                            <img src="${movie.poster}" alt="${movie.title}">
+                            <div class="poster-glow"></div>
+                            <span class="poster-badge">
+                                <i class="fas fa-film"></i> ${qualityKeys[qualityKeys.length - 1] || 'HD'}
+                            </span>
+                            <div class="download-count-badge">
+                                <i class="fas fa-download"></i>
+                                <span>${formatNumber(movie.downloads || 0)} Downloads</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Info -->
+                    <div class="movie-info" data-aos="fade-left">
+                        <h1 class="movie-title">${movie.title}</h1>
+                        
+                        <div class="movie-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                ${movie.year}
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                2h 15min
+                            </span>
+                            <span class="meta-item">
+                                <div class="rating-stars">
+                                    ${starsHTML}
+                                </div>
+                                <span>${rating}</span>
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-globe"></i>
+                                සිංහල
+                            </span>
+                        </div>
+                        
+                        <!-- Description -->
+                        <div class="description-box">
+                            <h3>
+                                <i class="fas fa-info-circle"></i>
+                                Movie Description
+                            </h3>
+                            <p>${movie.description || 'No description available for this movie.'}</p>
+                        </div>
+                        
+                        <!-- Share -->
+                        <div class="share-section">
+                            <button class="share-btn facebook" onclick="shareMovie('facebook')">
+                                <i class="fab fa-facebook-f"></i>
+                            </button>
+                            <button class="share-btn telegram" onclick="shareMovie('telegram')">
+                                <i class="fab fa-telegram-plane"></i>
+                            </button>
+                            <button class="share-btn whatsapp" onclick="shareMovie('whatsapp')">
+                                <i class="fab fa-whatsapp"></i>
+                            </button>
+                            <button class="share-btn" onclick="copyLink()">
+                                <i class="fas fa-link"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Download Section -->
+                ${qualityButtons ? `
+                <div class="download-section" data-aos="fade-up">
+                    <h3>
+                        <i class="fas fa-download"></i>
+                        Download Movie
+                    </h3>
+                    <div class="quality-grid">
+                        ${qualityButtons}
+                    </div>
+                </div>
+                ` : ''}
+                
+                <!-- Subtitle Section -->
+                ${subtitleButtons ? `
+                <div class="subtitle-section" data-aos="fade-up">
+                    <h3>
+                        <i class="fas fa-closed-captioning"></i>
+                        Subtitles (උපසිරැසි)
+                    </h3>
+                    <div class="subtitle-grid">
+                        ${subtitleButtons}
+                    </div>
+                </div>
+                ` : ''}
+            `;
+        }
+        
+        // Increment Download Count
+        function incrementDownload(movieId) {
+            let movies = JSON.parse(localStorage.getItem('moviesData') || '[]');
+            const movie = movies.find(m => m.id === movieId);
+            if (movie) {
+                movie.downloads = (movie.downloads || 0) + 1;
+                localStorage.setItem('moviesData', JSON.stringify(movies));
+                
+                // Update display
+                const badge = document.querySelector('.download-count-badge span');
+                if (badge) {
+                    badge.textContent = formatNumber(movie.downloads) + ' Downloads';
+                }
+            }
+        }
+        
+        // Format Number
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+        
+        // Share Functions
+        function shareMovie(platform) {
+            const url = window.location.href;
+            const title = document.querySelector('.movie-title')?.textContent || 'Movie';
+            
+            let shareUrl = '';
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                    break;
+                case 'telegram':
+                    shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`;
+                    break;
+            }
+            
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+        
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('✅ Link copied to clipboard!');
+            });
+        }
+        
+        // Load on page start
+        window.addEventListener('DOMContentLoaded', loadMovie);
+    </script>
+<!-- </body> tag එකට උඩින් add කරන්න -->
+<script src="js/database.js"></script>
+</body>
+</html>
